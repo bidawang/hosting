@@ -11,6 +11,8 @@
     },
     "require": {
         "php": "^8.1",
+        "ext-mbstring": "*",
+        "ext-curl": "*",
         "codeigniter4/framework": "^4.0"
     },
     "require-dev": {
@@ -38,6 +40,10 @@
         "sort-packages": true
     },
     "scripts": {
+        "post-install-cmd": [
+            "php spark commands",
+            "php spark migrate --all --ansi"
+        ],
         "test": "phpunit"
     }
 }
