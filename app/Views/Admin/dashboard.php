@@ -28,7 +28,6 @@
                             <?php 
                             $no = 1;
                             foreach ($subscription as $sub): ?>
-                            <?php if ($sub['expirated_date'] != null): ?>
                                 <tr>
                                     <td><?= $no++ ?></td>
                                     <td><?= esc($sub['nama_lengkap']) ?></td>
@@ -51,7 +50,6 @@
                                         <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailModal" data-id="<?= $sub['id'] ?>" data-customer="<?= esc($sub['nama_lengkap']) ?>" data-expiry="<?= esc($sub['expirated_date']) ?>" data-remaining="<?= esc($sub['remaining_days']) ?>">Detail</button>
                                     </td>
                                 </tr>
-                                <?php endif; ?>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
