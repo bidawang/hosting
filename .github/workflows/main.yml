@@ -16,4 +16,3 @@ jobs:
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./
         remote-dir: /domains/hosting.batuah.tech/public_html
-    
