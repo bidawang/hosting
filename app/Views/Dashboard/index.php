@@ -5,7 +5,7 @@
                 <div class="container my-5 px-lg-5">
                     <div class="row g-5">
                         <div class="col-lg-6 pt-5 text-center text-lg-start">
-                            <h1 class="display-4 text-white mb-4 animated slideInLeft">Danang5 Hosting6</h1>
+                            <h1 class="display-4 text-white mb-4 animated slideInLeft">Danang5 Hosting7 !!!</h1>
                             <p class="text-white animated slideInLeft">Memberikan paket hosting sesuai dengan keingian anda</p>
                             </div>
                         <div class="col-lg-6 text-center text-lg-start">
