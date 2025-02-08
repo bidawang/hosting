@@ -47,6 +47,26 @@
                 <span class="menu-title">Dashboard</span>
                 <i class="mdi mdi-home menu-icon"></i>
               </a>
+              <a class="nav-link" href="<?= base_url('storage')?>">
+                <span class="menu-title">Storage</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+              <a class="nav-link" href="<?= base_url('kategori')?>">
+                <span class="menu-title">Kategori</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+              <a class="nav-link" href="<?= base_url('paket-hosting')?>">
+                <span class="menu-title">Paket Hosting</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+              <a class="nav-link" href="<?= base_url('user')?>">
+                <span class="menu-title">User</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
+              <a class="nav-link" href="<?= base_url('subscription')?>">
+                <span class="menu-title">Subscription</span>
+                <i class="mdi mdi-home menu-icon"></i>
+              </a>
               <a class="nav-link" href="<?= base_url('logout')?>">
                 <span class="menu-title">Logout</span>
                 <i class="fa fa-power-off menu-icon"></i>

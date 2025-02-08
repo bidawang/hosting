@@ -36,3 +36,59 @@ $routes->get('send', 'EmailController::sendEmail');
 $routes->get('cek-expired', 'SubscriptionController::checkExpirationDates');
 
 
+//Client Area
+$routes->get('clientarea', 'SubscriptionController::clientarea');
+$routes->get('clientarea/hosting(:num)', 'SubscriptionController::hosting/$1');
+
+//Storage
+$routes->group('storage', ['namespace' => 'App\Controllers'], function($routes) {
+    $routes->get('/', 'StorageController::index');
+    $routes->get('create', 'StorageController::create');
+    $routes->post('store', 'StorageController::store');
+    $routes->get('edit/(:num)', 'StorageController::edit/$1');
+    $routes->post('update/(:num)', 'StorageController::update/$1');
+    $routes->get('delete/(:num)', 'StorageController::delete/$1');
+});
+
+//Kategori
+$routes->group('kategori', ['namespace' => 'App\Controllers'], function ($routes) {
+    $routes->get('/', 'KategoriController::index');
+    $routes->get('create', 'KategoriController::create');
+    $routes->post('store', 'KategoriController::store');
+    $routes->get('edit/(:num)', 'KategoriController::edit/$1');
+    $routes->post('update/(:num)', 'KategoriController::update/$1');
+    $routes->get('delete/(:num)', 'KategoriController::delete/$1');
+});
+
+//Paket Hosting
+$routes->group('paket-hosting', function($routes) {
+    $routes->get('/', 'PaketHostingController::index');
+    $routes->get('create', 'PaketHostingController::create');
+    $routes->post('store', 'PaketHostingController::store');
+    $routes->get('edit/(:num)', 'PaketHostingController::edit/$1');
+    $routes->post('update/(:num)', 'PaketHostingController::update/$1');
+    $routes->get('delete/(:num)', 'PaketHostingController::delete/$1');
+});
+
+//Users
+$routes->group('user', ['namespace' => 'App\Controllers'], function ($routes) {
+    $routes->get('/', 'UserController::index');        // List semua user
+    $routes->get('create', 'UserController::create');     // Form tambah user
+    $routes->post('store', 'UserController::store');      // Proses simpan user baru
+    $routes->get('edit/(:num)', 'UserController::edit/$1');  // Form edit user berdasarkan ID
+    $routes->post('update/(:num)', 'UserController::update/$1'); // Proses update user berdasarkan ID
+    $routes->get('delete/(:num)', 'UserController::delete/$1');  // Hapus user berdasarkan ID
+});
+
+//Subscription
+$routes->group('subscription', ['namespace' => 'App\Controllers'], function ($routes) {
+    $routes->get('/', 'SubscriptionController::index');
+    $routes->get('create', 'SubscriptionController::create');
+    $routes->post('store', 'SubscriptionController::store');
+    $routes->get('edit/(:num)', 'SubscriptionController::edit/$1');
+    $routes->post('update/(:num)', 'SubscriptionController::update/$1');
+    $routes->get('delete/(:num)', 'SubscriptionController::delete/$1');
+});
+
+//
+

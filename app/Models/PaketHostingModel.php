@@ -29,6 +29,15 @@ class PaketHostingModel extends Model
         
         return $id === null ? $query->findAll() : $query->first();
     }
+
+    public function getNamaHosting()
+{
+    return $this->select('paket_hosting.*, kategori.*, storage.*')
+                ->join('kategori', 'paket_hosting.id_kategori = kategori.id')
+                ->join('storage', 'paket_hosting.id_storage = storage.id')
+                ->findAll();
+}
+
     
 
     protected bool $allowEmptyInserts = false;

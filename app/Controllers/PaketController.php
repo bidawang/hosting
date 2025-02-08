@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\ControlPanelModel;
 use App\Models\StorageModel;
 use App\Models\KategoriModel;
 use App\Models\PaketHostingModel;
@@ -61,50 +62,85 @@ class PaketController extends BaseController
         
         return view('Customer/subscription', ['paket' => $paket]); // Send to verification view
     }
-
-    public function confirm()
+    private function generateRandomPassword($length = 12)
     {
-        $userId = $this->request->getPost('user_id');
-        $paketId = $this->request->getPost('paket_id');
-        
-        if (!$userId || !$paketId) {
-            return redirect()->back()->with('error', 'User ID or Package ID is missing.');
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        $charactersLength = strlen($characters);
+        $randomPassword = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomPassword .= $characters[rand(0, $charactersLength - 1)];
         }
+        return $randomPassword;
+    }
+    
+    public function confirm()
+{
+    $userId = $this->request->getPost('user_id');
+    $paketId = $this->request->getPost('paket_id');
+    $jumlahBulan = $this->request->getPost('jumlah_bulan');
+    
+    if (!$userId || !$paketId) {
+        return redirect()->back()->with('error', 'User ID or Package ID is missing.');
+    }
 
-        // Atur data untuk disimpan
-        $data = [
-            'id_customer' => $userId,
-            'id_paket_hosting' => $paketId,
-            'status' => 'pending', // set initial status as pending
-            'tanggal_pesan' => null, // set as null initially
-            'expirated_date' => null, // set as null initially
-            'created_at' => date('Y-m-d H:i:s'), // set current date-time
+    $paketHostingModel = new PaketHostingModel();
+
+    // Hitung total harga
+    $total = $paketHostingModel->find($paketId);
+    $hargaPerBulan = $total['harga_beli'];
+    $totalHarga = $hargaPerBulan * $jumlahBulan;
+
+    // Atur data untuk disimpan ke tabel subscription
+    $data = [
+        'id_customer' => $userId,
+        'id_paket_hosting' => $paketId,
+        'jumlah' => $jumlahBulan,
+        'total' => $totalHarga,
+        'status' => 'pending',
+        'tanggal_pesan' => null,
+        'expirated_date' => null,
+        'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s')
+    ];
+
+    $hostingOrderModel = new SubscriptionModel();
+
+    if ($hostingOrderModel->insert($data)) {
+        // Ambil last inserted ID dari subscription
+        $lastId = $hostingOrderModel->getInsertID();
+        $generatedPassword = $this->generateRandomPassword(8);
+        // Atur data untuk disimpan ke tabel control_panel
+        $controlPanelData = [
+            'id_subscription' => $lastId,
+            'username' => 'user_' . $lastId, // Username bisa di-generate seperti ini
+            'password' => $generatedPassword,
+            'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s')
         ];
 
-        // Inisialisasi model dan simpan data
-        $hostingOrderModel = new SubscriptionModel();
-        if ($hostingOrderModel->insert($data)) {
-            // Dapatkan email customer
-            $userModel = new UserModel();
-            $customer = $userModel->find($userId);
+        // Simpan data ke tabel control_panel
+        $controlPanelModel = new ControlPanelModel();
+        $controlPanelModel->insert($controlPanelData);
 
-            // Dapatkan email semua admin
-            $adminEmails = $userModel->getAdminEmails();
+        // Kirim notifikasi ke customer dan admin
+        $userModel = new UserModel();
+        $customer = $userModel->find($userId);
+        $adminEmails = $userModel->getAdminEmails();
 
-            // Kirim email notifikasi ke customer
-            $this->sendNotification($customer['email'], "Konfirmasi Pembelian Paket Hosting", "Terima kasih telah melakukan pembelian paket hosting. Status pesanan Anda saat ini adalah 'Pending'. Kami akan segera memproses pesanan Anda.");
+        // Notifikasi ke customer
+        $this->sendNotification($customer['email'], "Konfirmasi Pembelian Paket Hosting", "Terima kasih telah melakukan pembelian paket hosting. Status pesanan Anda saat ini adalah 'Pending'. Kami akan segera memproses pesanan Anda.");
 
-            // Kirim email notifikasi ke semua admin
-            foreach ($adminEmails as $admin) {
-                $this->sendNotification($admin['email'], "Notifikasi Pembelian Paket Hosting Baru", "Seorang pengguna dengan nama {$customer['nama_lengkap']} telah melakukan pembelian paket hosting baru. Silakan cek dashboard admin untuk detail lebih lanjut.");
-            }
-
-            return redirect()->to('/')->with('message', 'Order has been successfully confirmed.');
-        } else {
-            return redirect()->back()->with('error', 'Failed to confirm the order.');
+        // Notifikasi ke admin
+        foreach ($adminEmails as $admin) {
+            $this->sendNotification($admin['email'], "Notifikasi Pembelian Paket Hosting Baru", "Seorang pengguna dengan nama {$customer['nama_lengkap']} telah melakukan pembelian paket hosting baru. Silakan cek dashboard admin untuk detail lebih lanjut.");
         }
+
+        return redirect()->to('clientarea')->with('message', 'Order has been successfully confirmed.');
+    } else {
+        return redirect()->back()->with('error', 'Failed to confirm the order.');
     }
+}
+
 
     // Fungsi untuk mengirim email
     private function sendNotification($to, $subject, $message)
