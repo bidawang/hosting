@@ -151,7 +151,7 @@
         <a href="<?= base_url('contact');?>" class="nav-item nav-link">Contact</a>
     </div>
     <?php if (session()->get('isLoggedIn')): ?>
-        <a href="clientarea" class="btn btn-success ms-3"">Client Area</a>
+        <a href="<?=base_url('clientarea')?>" class="btn btn-success ms-3"">Client Area</a>
         <a href="<?= base_url('logout') ?>" class="btn btn-danger ms-3">Logout</a>
     <?php else: ?>
         <a href="<?= base_url('login') ?>" class="btn btn-secondary ms-3">Login</a>

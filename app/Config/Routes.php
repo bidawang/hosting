@@ -36,9 +36,6 @@ $routes->get('send', 'EmailController::sendEmail');
 $routes->get('cek-expired', 'SubscriptionController::checkExpirationDates');
 
 
-//Client Area
-$routes->get('clientarea', 'SubscriptionController::clientarea');
-$routes->get('clientarea/hosting(:num)', 'SubscriptionController::hosting/$1');
 
 //Storage
 $routes->group('storage', ['namespace' => 'App\Controllers'], function($routes) {
@@ -90,5 +87,11 @@ $routes->group('subscription', ['namespace' => 'App\Controllers'], function ($ro
     $routes->get('delete/(:num)', 'SubscriptionController::delete/$1');
 });
 
-//
+//Client Area
+$routes->get('clientarea', 'SubscriptionController::clientarea');
+
+//ControlPanel
+$routes->get('/client-area/control-panel/(:num)', 'ControlPanelController::controlPanel/$1');
+$routes->post('/client-area/update-control-panel/(:num)', 'ControlPanelController::updateControlPanel/$1'); // Update username & password berdasarkan id_subscribtion
+
 

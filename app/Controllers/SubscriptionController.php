@@ -150,13 +150,15 @@ class SubscriptionController extends BaseController
         $user = $userModel->find($userId);
 
         $subscriptions = $subscriptionModel
-        ->select('subscription.*, paket_hosting.*,kategori.nama_kategori , users.nama_lengkap, control_panel.*') // Tambahkan kolom dari tabel users
-        ->join('paket_hosting', 'paket_hosting.id = subscription.id_paket_hosting') // Join paket_hosting
-        ->join('kategori', 'kategori.id = paket_hosting.id_kategori')
-        ->join('users', 'users.id = subscription.id_customer')
-        ->join('control_panel', 'control_panel.id_subscription = subscription.id','left') // Join users untuk validasi user
-        ->where('subscription.id_customer', $userId) // Filter berdasarkan id_customer
-        ->findAll();
+    ->select('subscription.id as subscription_id, paket_hosting.id as paket_hosting_id, kategori.id as kategori_id, 
+              users.id as user_id, control_panel.id as control_panel_id, 
+              subscription.*, paket_hosting.*, kategori.nama_kategori, users.nama_lengkap, control_panel.*') 
+    ->join('paket_hosting', 'paket_hosting.id = subscription.id_paket_hosting') // Join paket_hosting
+    ->join('kategori', 'kategori.id = paket_hosting.id_kategori')
+    ->join('users', 'users.id = subscription.id_customer')
+    ->join('control_panel', 'control_panel.id_subscription = subscription.id', 'left') // Join control_panel
+    ->where('subscription.id_customer', $userId) // Filter berdasarkan id_customer
+    ->findAll();
 
 
         $data = [

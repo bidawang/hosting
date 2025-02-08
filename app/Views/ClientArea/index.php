@@ -20,11 +20,11 @@
         <div class="row g-5">
             <div class="col-lg-4">
                 <div class="bg-light p-4 rounded">
-                    <h4 class="mb-3">Profil Klien</h4>
+                    <h4 class="mb-3">Profil</h4>
                     <p><strong>Nama:</strong> <?= esc($user['nama_lengkap']) ?></p>
                     <p><strong>Email:</strong> <?= esc($user['email']) ?></p>
-                    <p><strong>Status:</strong> Aktif</p>
-                    <a href="#" class="btn btn-primary w-100">Edit Profil</a>
+                    <p><strong>Status:</strong> Aktif (belum)</p>
+                    <!-- <a href="#" class="btn btn-primary w-100">Edit Profil</a> -->
                 </div>
             </div>
             <div class="col-lg-8 text-center">
@@ -72,9 +72,8 @@
                                     <td><?= esc($subscription['username'])?></td>
                                     <td><?= esc($subscription['password'])?></td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-secondary">
-                                            <i class="bi bi-gear"></i>
-                                        </a>
+                                    <a href="<?= base_url('/client-area/control-panel/' . $subscription['subscription_id']) ?>" class="btn btn-sm btn-secondary">
+    <i class="bi bi-gear"></i></a>
                                     </td>
                                 </tr>
                             </tbody>

@@ -13,7 +13,7 @@ class ControlPanelModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields = [
-        'id_subscribtion',
+        'id_subscription',
         'id_server',
         'username',
         'password'
