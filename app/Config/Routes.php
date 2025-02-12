@@ -85,6 +85,7 @@ $routes->group('subscription', ['namespace' => 'App\Controllers'], function ($ro
     $routes->get('edit/(:num)', 'SubscriptionController::edit/$1');
     $routes->post('update/(:num)', 'SubscriptionController::update/$1');
     $routes->get('delete/(:num)', 'SubscriptionController::delete/$1');
+    $routes->post('updateStatus/(:num)', 'SubscriptionController::updateStatus/$1');
 });
 
 //Client Area
@@ -93,5 +94,7 @@ $routes->get('clientarea', 'SubscriptionController::clientarea');
 //ControlPanel
 $routes->get('/client-area/control-panel/(:num)', 'ControlPanelController::controlPanel/$1');
 $routes->post('/client-area/update-control-panel/(:num)', 'ControlPanelController::updateControlPanel/$1'); // Update username & password berdasarkan id_subscribtion
+$routes->post('/client-area/login', 'ControlPanelController::login');
+
 
 

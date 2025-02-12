@@ -37,13 +37,13 @@ class ControlPanelController extends BaseController
     // Memproses update username dan password berdasarkan id_subscribtion
     public function updateControlPanel($id)
     {
+
         
         $data = $this->request->getPost();
-
         // Validasi input
         $rules = [
-            'username' => 'required|min_length[3]|max_length[50]',
-            'password' => 'permit_empty|min_length[6]'
+            'username' => 'required',
+            'password' => 'required'
         ];
 
         if (!$this->validate($rules)) {
@@ -53,11 +53,36 @@ class ControlPanelController extends BaseController
         // Data untuk update
         $updateData = ['username' => $data['username']];
         if (!empty($data['password'])) {
-            $updateData['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+            $updateData['password'] = $data['password'];
         }
         // Update data di database
-        $this->cPanelmodel->update($id, $updateData);
-
+        $update = $this->cPanelmodel
+        ->where('id_subscription', $id)
+        ->set($updateData)
+        ->update();
         return redirect()->back()->with('success', 'Username dan password berhasil diperbarui.');
     }
+
+    public function login()
+{
+    $username = $this->request->getPost('username');
+    $password = $this->request->getPost('password');
+
+    // Query untuk cek username dan password
+    $cpanel = $this->cPanelmodel
+                        ->where('username', $username)
+                        ->where('password', $password)
+                        ->first();    
+    $subscription = $this->subscriptionModel->where('id', $cpanel['id_subscription'])->first();
+    if ($subscription) {
+        // Cek expired_date
+        $isExpired = date('Y-m-d') > $subscription['expirated_date'];
+        $status = $subscription['status'];
+        return view('ClientArea/Services/cekexpired', ['status'=>$status,'isExpired' => $isExpired, 'expiredDate' => $subscription['expirated_date']]);
+    } else {
+        return redirect()->back()->with('error', 'Username atau password salah.');
+    }
+}
+
+
 }

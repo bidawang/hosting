@@ -35,19 +35,25 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Status</label>
-                    <input type="text" name="status" id="status" class="form-control" value="<?= esc($subscription['status']) ?>" required>
-                </div>
+    <label for="status">Status</label>
+    <select name="status" id="status" class="form-control" required>
+        <option value="">Pilih Status</option>
+        <?php 
+        $statusOptions = ['active', 'expired', 'pending', 'cancelled'];
+        foreach ($statusOptions as $status): ?>
+            <option value="<?= $status ?>" <?= $subscription['status'] == $status ? 'selected' : '' ?>>
+                <?= ucfirst($status) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
-                <div class="form-group">
-                    <label for="tanggal_pesan">Order Date</label>
-                    <input type="date" name="tanggal_pesan" id="tanggal_pesan" class="form-control" value="<?= esc($subscription['tanggal_pesan']) ?>" required>
-                </div>
+<div class="form-group">
+    <label for="expirated_date">Expired Date</label>
+    <input type="date" name="expirated_date" id="expirated_date" class="form-control" 
+           value="<?= esc(date('Y-m-d', strtotime($subscription['expirated_date']))) ?>" required>
+</div>
 
-                <div class="form-group">
-                    <label for="expirated_date">Expired Date</label>
-                    <input type="date" name="expirated_date" id="expirated_date" class="form-control" value="<?= esc($subscription['expirated_date']) ?>" required>
-                </div>
 
                 <button type="submit" class="btn btn-success">Update</button>
                 <a href="<?= base_url('subscription') ?>" class="btn btn-secondary">Batal</a>
