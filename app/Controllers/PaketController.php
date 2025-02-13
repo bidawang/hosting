@@ -59,7 +59,7 @@ class PaketController extends BaseController
         if (!$paket) {
             return redirect()->to('/'); // Redirect if package not found
         }
-        
+        $satuan = $this->request->getGet('satuan_lama') ?? 'bulan'; // Default to 'bulan' if not provided
         return view('Customer/subscription', ['paket' => $paket]); // Send to verification view
     }
     private function generateRandomPassword($length = 12)
@@ -77,8 +77,7 @@ class PaketController extends BaseController
 {
     $userId = $this->request->getPost('user_id');
     $paketId = $this->request->getPost('paket_id');
-    $jumlahBulan = $this->request->getPost('jumlah_bulan');
-    
+    $jumlahDurasi = $this->request->getPost('jumlah_bulan') ?? $this->request->getPost('jumlah_tahun');
     if (!$userId || !$paketId) {
         return redirect()->back()->with('error', 'User ID or Package ID is missing.');
     }
@@ -87,14 +86,14 @@ class PaketController extends BaseController
 
     // Hitung total harga
     $total = $paketHostingModel->find($paketId);
-    $hargaPerBulan = $total['harga_beli'];
-    $totalHarga = $hargaPerBulan * $jumlahBulan;
+    $harga = $total['harga_beli'];
+    $totalHarga = $harga * $jumlahDurasi;
 
     // Atur data untuk disimpan ke tabel subscription
     $data = [
         'id_customer' => $userId,
         'id_paket_hosting' => $paketId,
-        'jumlah' => $jumlahBulan,
+        'jumlah' => $jumlahDurasi,
         'total' => $totalHarga,
         'status' => 'pending',
         'expirated_date' => null,

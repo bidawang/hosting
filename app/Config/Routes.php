@@ -31,10 +31,10 @@ $routes->group('admin', ['filter'=>'admin'], function($routes){
     $routes->get('dashboard', 'SubscriptionController::index');
 });
 
-// tes email
+// tes email (CRONJOB)
 $routes->get('send', 'EmailController::sendEmail');
 $routes->get('cek-expired', 'SubscriptionController::checkExpirationDates');
-
+$routes->get('/auto-expire-subscriptions', 'SubscriptionController::autoExpireSubscriptions');
 
 
 //Storage

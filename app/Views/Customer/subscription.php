@@ -63,20 +63,36 @@
 
                         <!-- Form Confirm Purchase -->
                         <form action="<?= base_url('confirm'); ?>" method="post">
-                            <input type="hidden" name="paket_id" value="<?= esc($paket['id']); ?>">
-                            <?php $user_id = session()->get('id'); ?>
-                            <input type="hidden" name="user_id" value="<?= esc($user_id); ?>">
-                            
-                            <!-- Pilihan Jumlah Bulan -->
-                            <div class="mb-3">
-                                <label for="jumlah-bulan" class="form-label">Pilih Jumlah Bulan:</label>
-                                <select id="jumlah-bulan" name="jumlah_bulan" class="form-select" onchange="updateTotalPrice()">
-                                    <option value="1">1 Bulan</option>
-                                    <option value="3">3 Bulan</option>
-                                    <option value="6">6 Bulan</option>
-                                    <option value="12">12 Bulan</option>
-                                </select>
-                            </div>
+    <input type="hidden" name="paket_id" value="<?= esc($paket['id']); ?>">
+    <?php $user_id = session()->get('id'); ?>
+    <input type="hidden" name="user_id" value="<?= esc($user_id); ?>">
+
+    
+
+    <?php if ($paket['satuan_lama'] === 'bulan'): ?>
+        <!-- Form Pilihan Bulan -->
+        <div class="mb-3">
+            <label for="jumlah-bulan" class="form-label">Pilih Jumlah Bulan:</label>
+            <select id="jumlah-bulan" name="jumlah_bulan" class="form-select">
+                <option value="1">1 Bulan</option>
+                <option value="3">3 Bulan</option>
+                <option value="6">6 Bulan</option>
+                <option value="12">12 Bulan</option>
+            </select>
+        </div>
+    <?php elseif ($paket['satuan_lama'] === 'tahun'): ?>
+        <!-- Form Pilihan Tahun -->
+        <div class="mb-3">
+            <label for="jumlah-tahun" class="form-label">Pilih Jumlah Tahun:</label>
+            <select id="jumlah-tahun" name="jumlah_tahun" class="form-select">
+                <option value="1">1 Tahun</option>
+                <option value="2">2 Tahun</option>
+                <option value="3">3 Tahun</option>
+                <option value="5">5 Tahun</option>
+            </select>
+        </div>
+    <?php endif; ?>
+
 
                             <!-- Total Price -->
                             <h5 class="fw-bold mb-4">Total Price: <span id="total-price">Rp <?= number_format($paket['harga_beli'], 0, ',', '.'); ?></span></h5>
@@ -94,5 +110,30 @@
     </div>
 </div>
 <!-- Verify Order End -->
+<script>
+    function updateTotalPrice() {
+        const hargaBeli = <?= $paket['harga_beli']; ?>;
+        let totalPrice = hargaBeli;
+
+        const jumlahBulan = document.getElementById('jumlah-bulan');
+        const jumlahTahun = document.getElementById('jumlah-tahun');
+
+        if (jumlahBulan && jumlahBulan.value) {
+            totalPrice = hargaBeli * parseInt(jumlahBulan.value);
+        } else if (jumlahTahun && jumlahTahun.value) {
+            totalPrice = hargaBeli * parseInt(jumlahTahun.value);
+        }
+
+        document.getElementById('total-price').innerText = 'Rp ' + totalPrice.toLocaleString('id-ID');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const jumlahBulan = document.getElementById('jumlah-bulan');
+        const jumlahTahun = document.getElementById('jumlah-tahun');
+
+        if (jumlahBulan) jumlahBulan.addEventListener('change', updateTotalPrice);
+        if (jumlahTahun) jumlahTahun.addEventListener('change', updateTotalPrice);
+    });
+</script>
 
 <?= $this->include('Layout/footer') ?>

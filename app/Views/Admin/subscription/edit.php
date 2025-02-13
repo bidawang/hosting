@@ -34,20 +34,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-    <label for="status">Status</label>
-    <select name="status" id="status" class="form-control" required>
-        <option value="">Pilih Status</option>
-        <?php 
-        $statusOptions = ['active', 'expired', 'pending', 'cancelled'];
-        foreach ($statusOptions as $status): ?>
-            <option value="<?= $status ?>" <?= $subscription['status'] == $status ? 'selected' : '' ?>>
-                <?= ucfirst($status) ?>
-            </option>
-        <?php endforeach; ?>
-    </select>
-</div>
-
 <div class="form-group">
     <label for="expirated_date">Expired Date</label>
     <input type="date" name="expirated_date" id="expirated_date" class="form-control" 
