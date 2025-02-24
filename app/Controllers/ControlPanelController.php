@@ -52,6 +52,7 @@ class ControlPanelController extends BaseController
 
         // Data untuk update
         $updateData = ['username' => $data['username']];
+        $updateData = ['domain' => $data['domain']];
         if (!empty($data['password'])) {
             $updateData['password'] = $data['password'];
         }

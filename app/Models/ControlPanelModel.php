@@ -16,7 +16,8 @@ class ControlPanelModel extends Model
         'id_subscription',
         'id_server',
         'username',
-        'password'
+        'password',
+        'domain'
     ];
 
     protected bool $allowEmptyInserts = false;

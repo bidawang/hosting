@@ -65,7 +65,7 @@ class SubscriptionController extends BaseController
 
     public function store()
     {
-        dd($this->request->getPost());
+        // dd($this->request->getPost());
         $this->subsModel->insert($this->request->getPost());
         return redirect()->to(base_url('subscription'))->with('success', 'Subscription berhasil ditambahkan.');
     }
@@ -141,7 +141,7 @@ class SubscriptionController extends BaseController
         $controlPanelModel = new ControlPanelModel();
         $controlPanelData = [
             'id_subscription' => $id,
-            'username' => 'user_' . $id,
+            'username' => 'user' . $id,
             'password' => $generatedPassword,
             'created_at' => $currentDate,
             'updated_at' => $currentDate

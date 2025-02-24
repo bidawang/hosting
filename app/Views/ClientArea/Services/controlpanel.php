@@ -42,14 +42,22 @@
                     <form action="<?= base_url('/client-area/update-control-panel/' . $subscription['subscription_id']) ?>" method="post">
                         <?= csrf_field() ?>
                         <div class="mb-3">
-                            <label for="username" class="form-label">Username Baru</label>
-                            <input type="text" class="form-control" id="username" name="username" 
-                                   value="<?= esc($subscription['username']) ?>" required>
+                            <label for="username" class="form-label">Domain</label>
+                            <input type="text" class="form-control" id="username" name="domain"
+                            placeholder="contoh : domain.com"
+                                   value="<?= esc($subscription['domain']) ?>">
                         </div>
                         <div class="mb-3">
-                            <label for="password" class="form-label">Password Baru</label>
+                            <label for="username" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   value="<?= esc($subscription['username']) ?>" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
                             <input type="text" class="form-control" id="password" name="password" 
-                                   placeholder="Masukkan password baru">
+                            value="<?= esc($subscription['password']) ?>"
+
+                                   placeholder="Password">
                         </div>
                         <button type="submit" class="btn btn-primary w-100">Simpan Perubahan</button>
                     </form>
